@@ -2,7 +2,6 @@ from hmac import compare_digest
 from enum import Enum, unique
 from getpass import getpass
 from math import ceil
-from pprint import pprint
 from time import sleep
 import random
 
