@@ -2,8 +2,8 @@
 This project is a fully featured login system written in Python. It uses the sqlite3 database and has support for admins of different types with different permissions or privileges admins can use to control users registered in their app.
 
 # Usage
-  - First find the start method of the Main class located in main.py and change the context to either ON_LOGIN_USER for a normal user or ON_LOGIN_ADMIN for admin
-  same for the sign up too, ON_SIGN_UP_USER for creating a user account and ON_SIGN_UP_ADMIN for creating an admin account.
+  - First find the start method of the Main class located in main.py and change the context to either `Context.ON_LOGIN_USER` for a normal user or `Context.ON_LOGIN_ADMIN` for admin
+  same for the sign up too, `Context.ON_SIGN_UP_USER` for creating a user account and `Context.ON_SIGN_UP_ADMIN` for creating an admin account.
   
   - Just run the main.py file
   
