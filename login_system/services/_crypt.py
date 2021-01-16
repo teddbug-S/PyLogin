@@ -463,7 +463,7 @@ def generate_key():
 
 
 def generate_token():
-    DIGEST_SIZE = 17
+    DIGEST_SIZE = 15
     SECRET_KEY = generate_key()
     hash = blake2b(key=SECRET_KEY, digest_size=DIGEST_SIZE)
     return hash.hexdigest()
