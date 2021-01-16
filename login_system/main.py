@@ -156,7 +156,7 @@ class Main:
                     verifier = Verify(action=Action.AUTHENTICATE)
                     token = generate_token() # generate token
                     # generate the message with the token 
-                    msg = verifier.generate_message(to=admin.logged_in_admin.email, username=username, token=token)
+                    msg = verifier.generate_message(to=admin.logged_in_admin.email, username=admin.logged_in_admin.username, token=token)
                     response = verifier.send_message(msg) # send message to admin
                     if response == VerifyInfo.SUCCESS:
                         self.context = Context.ON_GET_TOKEN # set context to on_get_token
@@ -200,7 +200,7 @@ class Main:
                     verifier = Verify(action=Action.AUTHENTICATE)
                     token = generate_token() # generate token
                     # generate the message with the token 
-                    msg = verifier.generate_message(to=admin.logged_in_admin.email, username=username, token=token)
+                    msg = verifier.generate_message(to=admin.logged_in_admin.email, username=admin.logged_in_admin.username, token=token)
                     response = verifier.send_message(msg) # send message to admin
                     if response == VerifyInfo.SUCCESS:
                         self.context = Context.ON_GET_TOKEN # set context to on_get_token
@@ -357,6 +357,8 @@ class Main:
             # now try to return the option
             return index[int(option)]
         except (KeyError, ValueError): # if option not found
+            if option == 'cls':
+                return 'cls'
             self.handle_response(it.INVALID_INPUT)
              # call the response handler with the appropriate response
 
@@ -548,7 +550,7 @@ class Main:
             if self.prompt == '1':
                 self.context = Context.ON_LOGIN_ADMIN
             elif self.prompt == '2':
-                self.context = Context.ON_SIGN_UP_ADMIN
+                self.context = Context.ON_SIGN_UP_USER
             elif self.prompt == 'exit':
                 exit(" Good Bye.")
             else:
@@ -818,6 +820,8 @@ class Main:
                 # clear screen
                 elif self.prompt == 'cls':
                     self.clear_screen()
+                    self.context = Context.ON_ADMIN
+                    self.print_menu()
     
     def main(self):
         """
