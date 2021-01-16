@@ -7,4 +7,4 @@ This project is a fully featured login system written in Python. It uses the sql
   
   - Just run the main.py file
   
-  - If deleting a user, clearing of database and deleting admin raises an error, got verifiers.py and fill in the your gmail creds. You still need some setups with your gmail first. See [enable lesss secure apps in gmail ](https://www.lifewire.com/unlock-gmail-for-a-new-email-program-or-service-1171974#:~:text=To%20enable%20%22less%20secure%22%20email%20programs%20to%20access,sure%20Allow%20less%20secure%20apps%20is%20On%20.) for more details.
+  - If deleting a user, clearing of database and deleting admin raises an error, got verifiers.py and fill in the your gmail creds. You still need some setups with your gmail first. See [enable less secure apps in gmail ](https://www.lifewire.com/unlock-gmail-for-a-new-email-program-or-service-1171974#:~:text=To%20enable%20%22less%20secure%22%20email%20programs%20to%20access,sure%20Allow%20less%20secure%20apps%20is%20On%20.) for more details.
