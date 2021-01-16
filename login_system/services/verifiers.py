@@ -24,8 +24,8 @@ class Verify():
     """
     def __init__(self, action) -> None:
         super().__init__()
-        self.EMAIL_ADDRESS = "divinedarkey47@gmail.com" # pylogin email, currently not available you can use yours
-        self.PASSWORD = "stonebwoy" # your email password
+        self.EMAIL_ADDRESS = "" # pylogin email, currently not available you can use yours
+        self.PASSWORD = "" # your email password
         self.action = action
         self.console = Console(log_path=False, log_time=False)
 
