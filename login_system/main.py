@@ -4,17 +4,21 @@ from getpass import getpass
 from math import ceil, e
 from pprint import pprint
 from time import sleep
+import random
 
 from admin import Admin
 from user import User
 from resources.options import Option
+from resources.arts import welcome_text
+from services.print_rich import PrintRich
 from user import User
-from resources.banners import Banner
 from services import auths
 from system.info_types import InfoTypes as it
 from services.username_generator import generate_names
 from services.verifiers import Verify, Action, VerifyInfo
 from services._crypt import generate_token
+from resources.arts import home_logos, profile_panel_user, welcome_text, profile_panel_admin
+from services.print_rich import PrintRich
 
 
 @unique
@@ -51,18 +55,9 @@ class Main:
         self.prompt = None
         self.current_user = None
         self.current_admin = None
+        self.rich = PrintRich()
     
-    @staticmethod
-    def set_banner(banner="classic"):
-        """
-        Sets the banner of the app
 
-        Args:
-            the name of banner
-        """
-        _banner = Banner._init_banners()
-        return getattr(_banner, banner)
-    
     @staticmethod
     def _add_index(data):
         for d in range(len(data)):
@@ -152,7 +147,7 @@ class Main:
                 self.handle_response(response_1)
             else:
                 user = response_1 # else if we get the data we want
-                pprint(user.data_to_dict()) # print it out and confirm
+                self.rich.print_data_panel([user.data_to_dict()], profile_panel_user )# print it out and confirm
                 self.context = Context.ON_VERIFY_ACTION
                 data = self._get_input_data()  # get yes or no from the admin
                 if data == 'Y': # if admin wishes to proceed verify his or her legitimacy
@@ -196,7 +191,7 @@ class Main:
                 self.handle_response(response_1)
             else:
                 user = response_1 # else if we get the data we want
-                pprint(user.data_to_dict()) # print it out and confirm
+                self.rich.print_data_panel([user.data_to_dict()], profile_panel_admin) # print it out and confirm
                 self.context = Context.ON_VERIFY_ACTION
                 data = self._get_input_data()  # get yes or no from the admin
                 if data == 'Y': # if admin wishes to proceed verify his or her legitimacy
@@ -280,7 +275,7 @@ class Main:
             else:
                 user = response_1
                 if not user.blockstatus: # check if user has not been already blocked.
-                    pprint(user.data_to_dict())
+                    self.rich.print_data_panel([user.data_to_dict()], profile_panel_user)# print it out and confirm
                     self.context = Context.ON_VERIFY_ACTION
                     data = self._get_input_data() # get input
                     if data == 'Y':
@@ -314,7 +309,7 @@ class Main:
             else:
                 user = response_1
                 if user.blockstatus: # check if user has been blocked.
-                    pprint(user.data_to_dict())
+                    self.rich.print_data_panel([user.data_to_dict()], profile_panel_user) # print it out and confirm
                     self.context = Context.ON_VERIFY_ACTION
                     data = self._get_input_data() # get input
                     if data == 'Y':
@@ -547,6 +542,7 @@ class Main:
         """
         if self.context == Context.ON_START:
             self.clear_screen()
+            self.rich.print_welcome_panel(welcome_text)
             self.print_menu()
             self.prompt = input("\npylogin> ")
             if self.prompt == '1':
@@ -633,7 +629,7 @@ class Main:
                         data = response
                         self.clear_screen() # clear the screen
                         self.print_menu() # and print the menu
-                        self._print_home(data) # finally the data print it out
+                        self.rich.print_home_data(data, home_logos[random.randint(0, 4)]) # finally the data print it out
                 elif self.prompt == '2': # else if option is 2 which is my profile
                     response = self.current_user.get_profile() # get data on current user
                     # handle other reponses apart from the data
@@ -644,7 +640,7 @@ class Main:
                         self.clear_screen() # clear the screen
                         self.print_menu() # and print the menu
                         # just pretty print it for now
-                        pprint(data)
+                        self.rich.print_data_panel([data], profile_panel_user)
                 # else if option is 3 which is logout
                 elif self.prompt == '3':
                     self.current_user.logout() # logout from the user class
@@ -677,13 +673,13 @@ class Main:
                         data = response
                         self.clear_screen()
                         self.print_menu()
-                        pprint(data) # just pretty print it for now
+                        self.rich.print_data_panel([user.data_to_dict() for user in data], profile_panel_user)
                 elif self.prompt ==  '2':
                     # my profile
                     data = admin.logged_in_admin.data_to_dict() # get data on admin
                     self.clear_screen()
                     self.print_menu()
-                    pprint(data) # just pretty print it for now
+                    self.rich.print_data_panel([data], profile_panel_admin)
                 elif self.prompt == '3': # administrative
                     self.context = Context.ON_ADMIN  # change context
                     break # break loop
@@ -709,13 +705,10 @@ class Main:
             self.option.set_admin_options(_admin_options)  # set admin options
             self.clear_screen()
             self.print_menu()
-            count = 0 # a variable for keeping number of times admin selects options
-            # in order to clear screen in case is not nice lol 😂
             while True:           
                 prompt = f"\nadmin_{admin.logged_in_admin.username}@pylogin> " # a nice prompt
                 # set the prompt and call self.set_option to redirect the option chosen
                 self.prompt = self.index_option(input(prompt), admin.logged_in_admin.type)
-                count += 1
                 # now that we've got everything in place, let's write the option handlers
                 if self.prompt == '1': # we know what to do
                     # that it option delete user
@@ -746,7 +739,7 @@ class Main:
                         self.handle_response(response)
                     else: # if it's the data
                         data = response
-                        pprint(data) # just pretty print it for now.
+                        self.rich.print_data_panel([user.data_to_dict() for user in data], profile_panel_user)
                 elif self.prompt == '5':
                     # option block user
                     #self.print_menu()  # print the menu
@@ -768,7 +761,7 @@ class Main:
                     else:
                         # if it's data
                         data = response
-                        pprint(data)
+                        self.rich.print_data_panel([data.data_to_dict()], profile_panel_user)
                 # option search for admin
                 elif self.prompt == '8':
                     self.context = Context.ON_SEARCH_ADMIN
@@ -781,7 +774,7 @@ class Main:
                     else:
                         # if it's data
                         data = response
-                        pprint(data) # just pretty print it for now
+                        self.rich.print_data_panel([data.data_to_dict()], profile_panel_admin)
                 elif self.prompt == '9':
                     # no need for context
                     response = admin.get_users_count()
@@ -792,7 +785,7 @@ class Main:
                     else:
                         # if it's data
                         data = response
-                        print(f"\nThere are currently {data} registered users in the database.") # print it
+                        print(f"\n {data} registered user(s) in database.") # print it
                 # see all admins in the database
                 elif self.prompt == '10':
                     # no need for context
@@ -804,7 +797,7 @@ class Main:
                     else:
                         # if it's data
                         data = response
-                        pprint(data) # just pretty print it for now
+                        self.rich.print_data_panel([user.data_to_dict() for user in data], profile_panel_admin)
                 # get number of admins
                 elif self.prompt == '11':
                     # and lastly no need for context
@@ -816,21 +809,15 @@ class Main:
                     else:
                         # if it's data
                         data = response
-                        print(f"\nThere are currently {data} registered admin(s) in the database.") # print it
+                        print(f"\n {data} registered admin(s) in database.") # print it
                 # go back to admin dashboard
                 elif self.prompt == '12':
-                    print("Yeah")
                     self.clear_screen() # clear screen
                     self.context = Context.ON_ADMIN_DASH
                     break
                 # clear screen
                 elif self.prompt == 'cls':
                     self.clear_screen()
-
-                if count == 3: # if count is equal to 5
-                    self.clear_screen() # clear screen
-                    self.print_menu() # and reprint the menu
-                    count = 0 # set it to 0
     
     def main(self):
         """
