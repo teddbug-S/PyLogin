@@ -440,3 +440,4 @@ class Admin:
                 return it.ACCESS_DENIED
         except AttributeError:
             return it.NO_LOGGED_IN_ADMIN
+        
