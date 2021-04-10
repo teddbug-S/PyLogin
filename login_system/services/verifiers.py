@@ -150,7 +150,6 @@ class Verify():
                 sleep(2.334)
                 self.console.log("[purple] Initiating SMTP ⚡⚡ [/purple]")
                 sleep(1.40)
-                self.console.log(" [yellow bold] Initiated Successfully [/yellow bold]✅")
                 with smtplib.SMTP_SSL('smtp.gmail.com') as smtp: # ssl smtp
                     status.update(
                         status="[bold plum4] Authenticating account 🔑",
