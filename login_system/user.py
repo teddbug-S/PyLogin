@@ -1,11 +1,14 @@
 from secrets import compare_digest
 from functools import cached_property
 import sqlite3
+import os
 
 from system.data_user import User as du
 from system.sql import SQLCommands as sqlc
 from system.info_types import InfoTypes as it
 
+DB_FOLDER = "User"
+DB_FILE = "userdata.db"
 
 class User:
     """ A real implementation of the user data class """
@@ -16,7 +19,7 @@ class User:
     
     @cached_property
     def __user_db(self):
-        return r"User\userdata.db"
+        return os.path.join(DB_FOLDER, DB_FILE)
 
 
     def __init_table(self):
