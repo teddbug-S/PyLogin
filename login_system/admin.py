@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from secrets import compare_digest
 from pprint import pprint
 from functools import cached_property
@@ -11,6 +12,10 @@ from system.sql import SQLCommands as sqlc
 from system.permissions import Permission as p
 
 
+ADMIN_FOLDER = "Admin"
+USER_FOLDER = "User"
+ADMIN_DB_NAME = "admindata.db"
+USER_DB_NAME = "userdata.db"
 
 class Admin:
     """ A real implementation of the Admin """
@@ -22,11 +27,11 @@ class Admin:
 
     @cached_property
     def __user_db(self):
-        return r"User\userdata.db"
+        return os.path.join(USER_FOLDER, USER_DB_NAME)
 
     @cached_property
     def __admin_db(self):
-        return r"Admin\admindata.db"
+        return os.path.join(ADMIN_FOLDER, ADMIN_DB_NAME)
 
     @cached_property
     def __init_table(self):
@@ -440,4 +445,3 @@ class Admin:
                 return it.ACCESS_DENIED
         except AttributeError:
             return it.NO_LOGGED_IN_ADMIN
-        
